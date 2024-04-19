@@ -1,14 +1,18 @@
 const http = require("http");
 const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
+const connectdb = require("./config/db");
+const router = require("./routes/index");
+
 const app = express();
+app.use(cors());
+app.use(express.json());
+app.use("/api", router);
+const PORT = process.env.PORT || 3001;
 
-// Example defining a route in Express
-app.get("/", (req, res) => {
-  res.send("<h1>Hello, Express.js Server!</h1>");
-});
-
-// Example specifying the port and starting the server
-const port = process.env.PORT || 3000; // You can use environment variables for port configuration
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+connectdb().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 });
